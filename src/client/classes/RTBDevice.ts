@@ -32,7 +32,6 @@ export class RTBDevice {
 
   constructor({
     type,
-    ua,
     ifa,
     lmt,
     make,
@@ -53,7 +52,6 @@ export class RTBDevice {
     ext
   }: {
     type: number,
-    ua: string,
     ifa: string,
     lmt: number,
     make: string,
@@ -61,10 +59,7 @@ export class RTBDevice {
     os: string,
     osv: string,
     hwv: string,
-    h: number,
-    w: number,
     ppi: number,
-    js: number,
     lang: string,
     ip: string,
     ipv6: string,
@@ -79,7 +74,7 @@ export class RTBDevice {
     ext: object
   }) {
     this.type = type
-    this.ua = ua
+    this.ua = navigator.userAgent
     this.ifa = ifa
     this.dnt = Number(navigator.doNotTrack)
     this.lmt = lmt // How to get it on browser

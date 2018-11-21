@@ -12,6 +12,8 @@ import { RTBSite } from './RTBSite'
 import { RTBUser } from './RTBUser'
 import { RTBGeo } from './RTBGeo'
 import { Sender } from './Sender'
+import { RTBDevice } from './RTBDevice';
+import { RTBRegs } from './RTBRegs'
 
 export class Impression {
   private openRTB: OpenRTB;
@@ -32,8 +34,30 @@ export class Impression {
         data: [],
         ext: {},
       }),
-      device: undefined,
-      regs: [],
+      device: new RTBDevice({
+        type: 0,
+        ifa: '',
+        lmt: 0,
+        make: '',
+        model: '',
+        os: '',
+        osv: '',
+        hwv: '',
+        ppi: 0,
+        lang: '',
+        ip: '',
+        ipv6: '',
+        xff: '',
+        iptr: 0,
+        carrier: '',
+        mccmnc: '',
+        mccmncsim: '',
+        contype: 0,
+        geofetch: 0,
+        geo: new RTBGeo(),
+        ext: {}
+      }),
+      regs: new RTBRegs({ ext: {} }),
       restrictions: []
     })
     const deal = new RTBDeal({
@@ -97,7 +121,6 @@ export class Impression {
       request,
       response: null
     })
-    this.openRTB = builder.build()
   }
 
   async send() {

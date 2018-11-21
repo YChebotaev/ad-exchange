@@ -1,14 +1,14 @@
 import { RTBSite } from './RTBSite'
 import { RTBUser } from './RTBUser'
 import { RTBDevice } from './RTBDevice'
-import { RTBReg } from './RTBReg'
+import { RTBRegs } from './RTBRegs'
 import { RTBRestriction } from './RTBRestriction'
 
 export class RTBContext {
   public site: RTBSite;
   public user: RTBUser;
   public device: RTBDevice;
-  public regs: RTBReg[];
+  public regs: RTBRegs;
   public restrictions: RTBRestriction[];
 
   constructor({
