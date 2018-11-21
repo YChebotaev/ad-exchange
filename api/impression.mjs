@@ -1,9 +1,8 @@
 import shortid from 'shortid'
-import { openRtb } from "./middleware/openrtb.mjs";
 
-export const impression = openRtb(({ request, response }) => {
-  console.log(request, response)
-})
+export const impression = ({ request, response }) => {
+  
+}
 
 /*
 (ctx, next) => {

@@ -28,6 +28,10 @@ export class OpenRTB {
     this.response = response
   }
 
+  getVersion() {
+    return this.ver
+  }
+
   toJSON(): object {
     return this
   }

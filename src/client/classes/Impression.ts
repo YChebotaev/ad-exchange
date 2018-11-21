@@ -1,12 +1,17 @@
 import { generate } from 'shortid'
 import { OpenRTB } from './OpenRTB'
 import { RTBResponse } from './RTBResponse'
-import { RTBRequest } from './RTBRequest';
-import { RTBSource } from './RTBSource';
-import { RTBItem } from './RTBItem';
-import { RTBMetric } from './RTBMetric';
-import { RTBDeal } from './RTBDeal';
-import { RTBPlacement } from './RTBPlacement';
+import { RTBRequest } from './RTBRequest'
+import { RTBSource } from './RTBSource'
+import { RTBItem } from './RTBItem'
+import { RTBMetric } from './RTBMetric'
+import { RTBDeal } from './RTBDeal'
+import { RTBPlacement } from './RTBPlacement'
+import { RTBContext } from './RTBContext'
+import { RTBSite } from './RTBSite'
+import { RTBUser } from './RTBUser'
+import { RTBGeo } from './RTBGeo'
+import { Sender } from './Sender'
 
 export class Impression {
   private openRTB: OpenRTB;
@@ -14,6 +19,23 @@ export class Impression {
 
   constructor({ element }: { element: HTMLElement }) {
     this.element = element
+    const context = new RTBContext({
+      site: new RTBSite(),
+      user: new RTBUser({
+        id: '', // TODO: To implement
+        buyeruid: '', // TODO: To implement
+        yob: 0,
+        gender: undefined,
+        keywords: '',
+        consent: '',
+        geo: new RTBGeo(),
+        data: [],
+        ext: {},
+      }),
+      device: undefined,
+      regs: [],
+      restrictions: []
+    })
     const deal = new RTBDeal({
       id: generate,
       flr: 0,
@@ -21,7 +43,7 @@ export class Impression {
       at: 0,
       wseat: [],
       wadomain: [],
-      ext: []
+      ext: {}
     })
     const spec = new RTBPlacement({})
     const item = new RTBItem({
@@ -65,7 +87,7 @@ export class Impression {
         item
       ],
       _package: 0,
-      context: {},
+      context,
       ext: {}
     })
     this.openRTB = new OpenRTB({
@@ -75,20 +97,14 @@ export class Impression {
       request,
       response: null
     })
+    this.openRTB = builder.build()
   }
 
   async send() {
-    return fetch('http://localhost:3000/api/impression', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(this, null, 2)
-    })
-      .then(res => res.json())
+    const sender = new Sender(this.openRTB, 'http://localhost:3000')
+    return sender.send()
       .then(response => {
-        this.openRTB.response = new RTBResponse(response)
-        console.log(this.openRTB)
+        this.openRTB.response = response
         return this
       })
   }

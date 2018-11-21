@@ -1,27 +1,20 @@
 import { OpenRTB } from '../lib/classes/OpenRTB'
-import { RTBRequest } from '../lib/classes/RTBRequest'
-import { RTBResponse } from '../lib/classes/RTBResponse'
-import { inspect } from 'util'
+import { createOpenRtb } from '../lib/createOpenRtb.mjs'
+import { createRequest } from '../lib/createRequest.mjs'
+import { createResponse } from '../lib/createResponse.mjs'
+import { respondWithTechnicalError } from '../lib/respondWithTechnicalError.mjs'
 
 export const openRtb = handler => async (ctx, next) => {
-  const request = new RTBRequest(ctx)
-  const response = new RTBResponse(request)
-  const openRtb = new OpenRTB({
-    ver: '3.0',
-    domainspec: 'adcom',
-    domainver: '1.0',
-    request,
-    response
-  })
-  console.log(inspect(openRtb))
+  const request = createRequest(ctx)
+  const response = await createResponse(request)
+  const openRtb = createOpenRtb(request, response)
+
   try {
-    await handler(openRtb)
+    await handler.call(openRtb, openRtb)
   } catch (error) {
-    openRtb.response.setNoBidReason(1 /* Technical Error */)
-    ctx.status = 500
-    ctx.message = error.message
+    respondWithTechnicalError(ctx, openRtb, error)
+  } finally {
     ctx.type = 'application/json'
     ctx.body = openRtb
-    next()
-  }
+  }  
 }

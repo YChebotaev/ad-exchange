@@ -2,6 +2,7 @@ import { generate } from 'shortid'
 import { RTBSource } from './RTBSource'
 import { RTBItem } from './RTBItem'
 import { RTBSite } from './RTBSite'
+import { RTBContext } from './RTBContext'
 
 export class RTBRequest {
   public id: string
@@ -15,7 +16,7 @@ export class RTBRequest {
   public source: RTBSource
   public item: RTBItem[]
   public _package: number
-  public context: object
+  public context: RTBContext
   public ext: object
 
   constructor({
@@ -30,7 +31,7 @@ export class RTBRequest {
     source = null,
     item = [],
     _package = 0,
-    context = {},
+    context,
     ext = {}
   }: {
     id: string,
@@ -44,7 +45,7 @@ export class RTBRequest {
     source: RTBSource,
     item: RTBItem[],
     _package: number,
-    context: RTBSite,
+    context: RTBContext,
     ext: object
   }) {
     this.id = id

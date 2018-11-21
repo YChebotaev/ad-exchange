@@ -1,8 +1,12 @@
-import shortid from 'shortid'
+import _ from 'lodash'
 
 export class RTBResponse {
-  constructor(rtbRequest) {
-    this.id = rtbRequest.id
-    this.bidid = shortid.generate()
+  constructor(config) {
+    _.assign(this, config)
+  }
+
+  setNoBidReason(nbr) {
+    this.nbr = nbr
+    return this
   }
 }
